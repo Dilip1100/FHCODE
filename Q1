@@ -1,0 +1,19 @@
+import pandas as pd
+df1 = pd.read_csv ('C:/Users/dilip/Downloads/Ord.csv')
+df2 = pd.read_csv ('C:/Users/dilip/Downloads/Stor.csv')
+df3 = pd.read_csv ('C:/Users/dilip/Downloads/Cust.csv')
+df2 = df2.rename({'id': 'store_id'}, axis='columns')
+df2 = df2.rename({'name': 'store_name'}, axis='columns')
+df3 = df3.rename({'name': 'customer_name', 'id': 'customer_id'}, axis='columns')
+df=df1.merge(df2,on='store_id').merge(df3,on='customer_id')
+f = {
+        'store_name' : 'unique', 
+        'total' : 'sum'
+}
+
+g = df.groupby(['store_name', 'order_date'])
+v1 = g.agg(f)
+v2 = g.agg(lambda x: x.drop_duplicates('store_name', keep='first').total.sum())
+
+df = pd.concat([v1, v2.to_frame('QUANTITY')], 1)
+df.to_csv(index=False)
