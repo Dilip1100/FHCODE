@@ -1,0 +1,11 @@
+import pandas as pd
+df1 = pd.read_csv ('C:/Users/dilip/Downloads/Ord.csv')
+df2 = pd.read_csv ('C:/Users/dilip/Downloads/Stor.csv')
+df3 = pd.read_csv ('C:/Users/dilip/Downloads/Cust.csv')
+df2 = df2.rename({'id': 'store_id'}, axis='columns')
+df2 = df2.rename({'name': 'store_name'}, axis='columns')
+df3 = df3.rename({'name': 'customer_name', 'id': 'customer_id'}, axis='columns')
+df=df1.merge(df2,on='store_id').merge(df3,on='customer_id')
+df_g = df.query('total < 10')
+df_g = df_g.filter(['first_name', 'last_name', 'email', 'total'])
+df_g.to_csv(index=False)
